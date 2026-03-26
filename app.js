@@ -1,19 +1,16 @@
-
-Copiar
-
 /* ═══════════════════════════════════════════════════════
    DICOTOMÍA DE CONTROL — app.js
    Vanilla JS, sin dependencias
 ═══════════════════════════════════════════════════════ */
- 
+
 const STORAGE_KEY = 'dicotomia_v1';
- 
+
 function cargarDatos() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { soltar: [], accion: [] }; }
   catch { return { soltar: [], accion: [] }; }
 }
 function guardarDatos(datos) { localStorage.setItem(STORAGE_KEY, JSON.stringify(datos)); }
- 
+
 const FRASES = [
   'No todo requiere tu energía.',
   'Soltar también es avanzar.',
@@ -25,11 +22,11 @@ const FRASES = [
   'Exhala. Esto ya no es tuyo.',
 ];
 function fraseCalmante() { return FRASES[Math.floor(Math.random() * FRASES.length)]; }
- 
+
 let estado = { problema: '', accion: '' };
 let screenActual = 'inicio';
 let screenAnteriorHistorial = 'inicio';
- 
+
 function irA(id) {
   if (id === 'historial') screenAnteriorHistorial = screenActual;
   const anterior = document.getElementById('screen-' + screenActual);
@@ -43,14 +40,14 @@ function irA(id) {
   screenActual = id;
   siguiente.scrollTop = 0;
 }
- 
+
 document.addEventListener('DOMContentLoaded', () => {
   const ahora = new Date();
   document.getElementById('fecha-input').value = ahora.toISOString().split('T')[0];
   const hh = String(ahora.getHours()).padStart(2, '0');
   const mm = String(Math.ceil(ahora.getMinutes() / 15) * 15 % 60).padStart(2, '0');
   document.getElementById('hora-input').value = `${hh}:${mm}`;
- 
+
   document.getElementById('btn-continuar').addEventListener('click', () => {
     const val = document.getElementById('problema-input').value.trim();
     if (!val) { shakeInput('problema-input'); return; }
@@ -58,22 +55,22 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('decision-preview').textContent = `"${val}"`;
     irA('decision');
   });
- 
+
   document.getElementById('problema-input').addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('btn-continuar').click(); }
   });
- 
+
   document.getElementById('btn-ver-historial').addEventListener('click', () => { renderHistorial(); irA('historial'); });
   document.getElementById('back-decision').addEventListener('click', () => irA('inicio'));
- 
+
   document.getElementById('btn-no').addEventListener('click', () => {
     document.getElementById('frase-calmante').textContent = fraseCalmante();
     irA('soltar');
   });
- 
+
   document.getElementById('btn-si').addEventListener('click', () => irA('accion'));
   document.getElementById('back-soltar').addEventListener('click', () => irA('decision'));
- 
+
   document.getElementById('btn-soltar').addEventListener('click', () => {
     const datos = cargarDatos();
     datos.soltar.unshift({ id: Date.now(), problema: estado.problema, fecha: new Date().toISOString() });
@@ -82,9 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('confirm-sub').textContent = 'Lo has dejado ir. Eso también es avanzar.';
     irA('confirmacion');
   });
- 
+
   document.getElementById('back-accion').addEventListener('click', () => irA('decision'));
- 
+
   document.querySelectorAll('.micro-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const txt = btn.dataset.text || '';
@@ -95,16 +92,16 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('selected');
     });
   });
- 
+
   document.getElementById('btn-agendar-paso1').addEventListener('click', () => {
     const val = document.getElementById('accion-input').value.trim();
     if (!val) { shakeInput('accion-input'); return; }
     estado.accion = val;
     irA('agendar');
   });
- 
+
   document.getElementById('back-agendar').addEventListener('click', () => irA('accion'));
- 
+
   document.getElementById('btn-agendar-final').addEventListener('click', () => {
     const fecha = document.getElementById('fecha-input').value;
     const hora  = document.getElementById('hora-input').value;
@@ -117,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('confirm-sub').textContent = `"${estado.accion}" — ${formatFecha(fecha)} a las ${hora}`;
     irA('confirmacion');
   });
- 
+
   document.getElementById('btn-reiniciar').addEventListener('click', () => {
     estado = { problema: '', accion: '' };
     document.getElementById('problema-input').value = '';
@@ -125,14 +122,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.micro-btn').forEach(b => b.classList.remove('selected'));
     irA('inicio');
   });
- 
+
   document.getElementById('btn-historial-desde-confirm').addEventListener('click', () => { renderHistorial(); irA('historial'); });
   document.getElementById('back-historial').addEventListener('click', () => irA(screenAnteriorHistorial || 'inicio'));
- 
+
   document.getElementById('btn-limpiar').addEventListener('click', () => {
     if (confirm('¿Borrar todo el historial?')) { guardarDatos({ soltar: [], accion: [] }); renderHistorial(); }
   });
- 
+
   document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -141,10 +138,10 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
     });
   });
- 
+
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(() => {});
 });
- 
+
 function shakeInput(id) {
   const el = document.getElementById(id);
   el.style.animation = 'none'; el.offsetHeight;
@@ -156,13 +153,13 @@ function shakeInput(id) {
     document.head.appendChild(s);
   }
 }
- 
+
 function formatFecha(isoDate) {
   const [y, m, d] = isoDate.split('-');
   const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   return `${parseInt(d)} ${meses[parseInt(m)-1]} ${y}`;
 }
- 
+
 function abrirCalendario(titulo, descripcion, fecha, hora) {
   const [y, m, d] = fecha.split('-');
   const [hh, mm] = hora.split(':');
@@ -178,7 +175,7 @@ function abrirCalendario(titulo, descripcion, fecha, hora) {
   const a = document.createElement('a'); a.href = url; a.download = 'evento.ics'; a.click();
   setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
- 
+
 function renderHistorial() {
   const datos = cargarDatos();
   const listSoltar = document.getElementById('list-soltar');
@@ -227,7 +224,7 @@ function renderHistorial() {
     });
   }
 }
- 
+
 function escapeHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
