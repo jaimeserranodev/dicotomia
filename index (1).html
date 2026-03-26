@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F5F4F0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Dicotomía" />
+  <meta name="description" content="Si no depende de ti, suéltalo. Si depende de ti, agéndalo." />
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <title>Dicotomía de Control</title>
+</head>
+<body>
+
+  <!-- ── SCREEN: INICIO ─────────────────────────────────── -->
+  <div class="screen active" id="screen-inicio">
+    <div class="screen-inner">
+      <header class="logo-area">
+        <span class="logo-symbol">◎</span>
+        <span class="logo-text">Dicotomía</span>
+      </header>
+      <div class="content">
+        <h1 class="headline">¿Qué te<br>preocupa?</h1>
+        <p class="sub">Escríbelo. Una sola cosa.</p>
+        <textarea
+          id="problema-input"
+          class="input-area"
+          placeholder="Ej: No sé si debo llamar a mi jefe…"
+          maxlength="200"
+          rows="3"
+        ></textarea>
+        <button class="btn-primary" id="btn-continuar">Continuar →</button>
+      </div>
+      <button class="btn-ghost" id="btn-ver-historial">Ver historial</button>
+    </div>
+  </div>
+
+  <!-- ── SCREEN: DECISIÓN ──────────────────────────────── -->
+  <div class="screen" id="screen-decision">
+    <div class="screen-inner">
+      <button class="btn-back" id="back-decision">← Volver</button>
+      <div class="content">
+        <p class="problema-preview" id="decision-preview"></p>
+        <h1 class="headline">¿Depende<br>de ti?</h1>
+        <div class="btn-duo">
+          <button class="btn-choice btn-no" id="btn-no">No</button>
+          <button class="btn-choice btn-si" id="btn-si">Sí</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN: SOLTAR ────────────────────────────────── -->
+  <div class="screen" id="screen-soltar">
+    <div class="screen-inner">
+      <button class="btn-back" id="back-soltar">← Volver</button>
+      <div class="content content-center">
+        <div class="release-icon">🍃</div>
+        <h1 class="headline-sm">Entonces no gastes<br>energía en ello.</h1>
+        <p class="frase-calmante" id="frase-calmante"></p>
+        <button class="btn-primary btn-release" id="btn-soltar">Soltar y continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN: ACCIÓN ────────────────────────────────── -->
+  <div class="screen" id="screen-accion">
+    <div class="screen-inner">
+      <button class="btn-back" id="back-accion">← Volver</button>
+      <div class="content">
+        <h1 class="headline">¿Cuál es la<br>acción inmediata?</h1>
+        <div class="micros" id="micros">
+          <button class="micro-btn" data-text="Llamar a ">📞 Llamar</button>
+          <button class="micro-btn" data-text="Enviar mensaje a ">💬 Mensaje</button>
+          <button class="micro-btn" data-text="Responder email de ">📧 Email</button>
+          <button class="micro-btn" data-text="Pedir cita con ">📅 Cita</button>
+          <button class="micro-btn" data-text="Hablar con ">🗣 Hablar</button>
+        </div>
+        <textarea
+          id="accion-input"
+          class="input-area"
+          placeholder="Ej: Llamar a mi jefe y preguntarle directamente"
+          maxlength="200"
+          rows="3"
+        ></textarea>
+        <button class="btn-primary" id="btn-agendar-paso1">Agendar esta acción →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN: AGENDAR ───────────────────────────────── -->
+  <div class="screen" id="screen-agendar">
+    <div class="screen-inner">
+      <button class="btn-back" id="back-agendar">← Volver</button>
+      <div class="content">
+        <h1 class="headline">¿Cuándo?</h1>
+        <div class="field-group">
+          <label class="field-label">Fecha</label>
+          <input type="date" class="input-field" id="fecha-input" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Hora</label>
+          <input type="time" class="input-field" id="hora-input" />
+        </div>
+        <button class="btn-primary" id="btn-agendar-final">Agendar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN: CONFIRMACIÓN ──────────────────────────── -->
+  <div class="screen" id="screen-confirmacion">
+    <div class="screen-inner">
+      <div class="content content-center">
+        <div class="check-circle" id="check-circle">✓</div>
+        <h1 class="headline-sm" id="confirm-title">Ya está<br>decidido.</h1>
+        <p class="confirm-sub" id="confirm-sub"></p>
+        <button class="btn-primary" id="btn-reiniciar">Empezar de nuevo</button>
+        <button class="btn-ghost" id="btn-historial-desde-confirm">Ver historial</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN: HISTORIAL ─────────────────────────────── -->
+  <div class="screen" id="screen-historial">
+    <div class="screen-inner screen-historial-inner">
+      <div class="historial-header">
+        <button class="btn-back" id="back-historial">← Volver</button>
+        <h2 class="historial-title">Historial</h2>
+        <button class="btn-limpiar" id="btn-limpiar">Limpiar</button>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="soltar">Soltado</button>
+        <button class="tab" data-tab="accion">En acción</button>
+      </div>
+
+      <div class="tab-content active" id="tab-soltar">
+        <div class="items-list" id="list-soltar"></div>
+        <p class="empty-msg" id="empty-soltar">Nada soltado aún.</p>
+      </div>
+      <div class="tab-content" id="tab-accion">
+        <div class="items-list" id="list-accion"></div>
+        <p class="empty-msg" id="empty-accion">Ninguna acción agendada aún.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
