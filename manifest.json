@@ -2,7 +2,7 @@
   "name": "Dicotomía de Control",
   "short_name": "Dicotomía",
   "description": "Si no depende de ti, suéltalo. Si depende de ti, agéndalo.",
-  "start_url": "./index.html",
+  "start_url": "./dicotomia",
   "display": "standalone",
   "background_color": "#F5F4F0",
   "theme_color": "#F5F4F0",
